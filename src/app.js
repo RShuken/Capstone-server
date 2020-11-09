@@ -6,8 +6,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
-const foldersRouter = require('./folders/folders_router');
-const notesRouter = require('./notes/notes_router');
+const usersRouter = require('./users/users-router');
 
 
 const app = express();
@@ -19,9 +18,9 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
-// routes for folders and notes
-app.use('/api/folders', foldersRouter);
-app.use('/api/notes', notesRouter);
+// routes for all CRUD commands to the server
+app.use('/api/users', usersRouter);
+
 
 // default route
 

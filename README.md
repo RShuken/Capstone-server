@@ -57,6 +57,8 @@ npm install winston for error logging
 to create a db:
 createdb -U dunder_mifflin dbName  -- in the command line to create a DB
 # db migrations
+run it with  || npm run migrate ||
+
 npm i postgrator-cli@3.2.0 -D   make a migrations folder, the file naming convention is 001.do.create_(tableName or thing you are creating) and 0001.undo.create_(same name as the do file)
 
 then you need to make a postgrator-config.js file with 
