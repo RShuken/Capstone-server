@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const usersRouter = require('./users/users-router');
 const connectionsRouter = require('./user_connections/user_connections-router');
+const userProfileRouter = require('./user_profile/user_profile_router');
 
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(cors());
 // routes for all CRUD commands to the server
 app.use('/api/users', usersRouter);
 app.use('/api/connections', connectionsRouter);
+app.use('/api/user_profile', userProfileRouter);
 
 
 // default route
