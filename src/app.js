@@ -23,7 +23,7 @@ app.use(cors());
 // routes for all CRUD commands to the server
 app.use('/api/users', usersRouter);
 app.use('/api/connections', connectionsRouter);
-app.use('/api/user_profile', userProfileRouter);
+app.use('/api/user_profiles', userProfileRouter);
 
 
 // default route
