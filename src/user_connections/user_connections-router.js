@@ -17,9 +17,10 @@ const serializeConnection = connection => ({
 connectionsRouter
   .route('/')
   .get((req, res, next) => {
-    ConnectionsService.getAllConnections(req.app.get('db'))
-      .then((connection) => {
-        res.json(connection);
+    const knexInstance = req.app.get('db');
+    ConnectionsService.getAllConnections(knexInstance)
+      .then((users) => {
+        res.json(users.map(serializeConnection));
       })
       .catch(next);
   })
@@ -28,7 +29,10 @@ connectionsRouter
     const newConnection = { blocked, flagged, user_id, connection_id, rating };
     ConnectionsService.insertConnection(req.app.get('db'), newConnection)
       .then((connection) => {
-        res.status(201).location(`/connections/${connection.user_id}`).json(connection);
+        res
+          .status(201)
+          .location(`/connections/${connection.user_id}`)
+          .json(connection);
       })
       .catch(next);
   });

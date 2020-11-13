@@ -132,6 +132,8 @@ you don't need to change the test_DB_URL because we don't use it in production.
 
 2.  then manual check the `package.json` and make sure that you have` postgrator` into the `dependencies`, also be sure to remove postgrator from the dev dependencies or else this means we can't migrate the files in the server.
 
+3. Now create a new Heroku instance with `heroku create`
+
 3.  now push to github, then do a push to heroku with
     `git push heroku main` _user master if the branch is called master_
 
