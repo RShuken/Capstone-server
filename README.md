@@ -148,3 +148,8 @@ you don't need to change the test_DB_URL because we don't use it in production.
 we type `heroku run npm run migrate` to get started on the migration.
 
 `heroku pg:psql` is a handy tool that will get us into the shell there. Then we can do \dt to see the tables in heroku
+
+
+# Before turning in the capstone
+
+flush the heroku DB and then provide them the new mock data files

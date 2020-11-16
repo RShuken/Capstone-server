@@ -1,12 +1,11 @@
 /* eslint-disable strict */
-const express = require('express');
-const ConnectionsService = require('./user_connections-service');
-const xss = require('xss');
+const express = require("express");
+const ConnectionsService = require("./user_connections-service");
+const xss = require("xss");
 const connectionsRouter = express.Router();
 const jsonParser = express.json();
 
-
-const serializeConnection = connection => ({
+const serializeConnection = (connection) => ({
   blocked: connection.blocked,
   flagged: connection.flagged,
   user_id: connection.user_id,
@@ -15,10 +14,10 @@ const serializeConnection = connection => ({
 });
 
 connectionsRouter
-  .route('/')
+  .route("/")
   .get((req, res, next) => {
-    const knexInstance = req.app.get('db');
-    ConnectionsService.getAllConnections(knexInstance)
+    const knexInstance = req.app.get("db");
+    ConnectionsService.getAllConnections(knexInstance, req.session.user.id)
       .then((users) => {
         res.json(users.map(serializeConnection));
       })
@@ -27,7 +26,7 @@ connectionsRouter
   .post(jsonParser, (req, res, next) => {
     const { blocked, flagged, user_id, connection_id, rating } = req.body;
     const newConnection = { blocked, flagged, user_id, connection_id, rating };
-    ConnectionsService.insertConnection(req.app.get('db'), newConnection)
+    ConnectionsService.insertConnection(req.app.get("db"), newConnection)
       .then((connection) => {
         res
           .status(201)
@@ -37,13 +36,13 @@ connectionsRouter
       .catch(next);
   });
 
-connectionsRouter.route('/:connection_id').get((req, res, next) => {
-  const knexInstance = req.app.get('db');
+connectionsRouter.route("/:connection_id").get((req, res, next) => {
+  const knexInstance = req.app.get("db");
   ConnectionsService.getById(knexInstance, req.params.connection_id)
     .then((connection) => {
       if (!connection) {
         return res.status(404).json({
-          error: { message: 'Connection doesn\'t exist' },
+          error: { message: "Connection doesn't exist" },
         });
       }
       res.json(connection);

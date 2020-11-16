@@ -1,10 +1,9 @@
 /* eslint-disable strict */
 
-
-const path = require('path');
-const express = require('express');
-const xss = require('xss');
-const UserProfileService = require('./user_profile_service');
+const path = require("path");
+const express = require("express");
+const xss = require("xss");
+const UserProfileService = require("./user_profile_service");
 
 const userProfileRouter = express.Router();
 const jsonParser = express.json();
@@ -29,14 +28,14 @@ const serializeUser = (user) => ({
   past_job2_company: xss(user.past_job2_company),
   past_job2_description: xss(user.past_job2_description),
   past_job2_start_date: user.past_job2_start_date,
-  past_job2_end_date: user.past_job2_end_date, 
-  user_id: user.user_id
+  past_job2_end_date: user.past_job2_end_date,
+  user_id: user.user_id,
 });
 
 userProfileRouter
-  .route('/')
+  .route("/")
   .get((req, res, next) => {
-    const knexInstance = req.app.get('db');
+    const knexInstance = req.app.get("db");
     UserProfileService.getUserProfile(knexInstance)
       .then((users) => {
         res.json(users.map(serializeUser));
@@ -65,7 +64,7 @@ userProfileRouter
       past_job2_description,
       past_job2_start_date,
       past_job2_end_date,
-      user_id
+      user_id,
     } = req.body;
     const newUserProfile = {
       id,
@@ -88,7 +87,7 @@ userProfileRouter
       past_job2_description,
       past_job2_start_date,
       past_job2_end_date,
-      user_id
+      user_id,
     };
 
     for (const [key, value] of Object.entries(newUserProfile)) {
@@ -100,8 +99,7 @@ userProfileRouter
       }
     }
 
-
-    UserProfileService.insertUserProfile(req.app.get('db'), newUserProfile)
+    UserProfileService.insertUserProfile(req.app.get("db"), newUserProfile)
       .then((user) => {
         res
           .status(201)
@@ -111,14 +109,27 @@ userProfileRouter
       .catch(next);
   });
 
+userProfileRouter.get("/profile", (req, res) => {
+  UserProfileService.getById(req.app.get("db"), req.session.user.id).then(
+    (user) => {
+      if (!user) {
+        return res.status(404).json({
+          error: { message: "User doesn't exist" },
+        });
+      }
+      res.json(serializeUser(user));
+    }
+  );
+});
+
 userProfileRouter
-  .route('/:id')
+  .route("/:id")
   .all((req, res, next) => {
-    UserProfileService.getById(req.app.get('db'), req.params.id)
+    UserProfileService.getById(req.app.get("db"), req.params.id)
       .then((user) => {
         if (!user) {
           return res.status(404).json({
-            error: { message: 'User doesn\'t exist' },
+            error: { message: "User doesn't exist" },
           });
         }
         res.user = user;
@@ -130,7 +141,7 @@ userProfileRouter
     res.json(serializeUser(res.user));
   })
   .delete((req, res, next) => {
-    UserProfileService.deleteUserProfile(req.app.get('db'), req.params.id)
+    UserProfileService.deleteUserProfile(req.app.get("db"), req.params.id)
       .then((numRowsAffected) => {
         res.status(204).end();
       })
@@ -158,7 +169,7 @@ userProfileRouter
       past_job2_description,
       past_job2_start_date,
       past_job2_end_date,
-      user_id
+      user_id,
     } = req.body;
     const userToUpdate = {
       id,
@@ -181,18 +192,22 @@ userProfileRouter
       past_job2_description,
       past_job2_start_date,
       past_job2_end_date,
-      user_id
+      user_id,
     };
 
     const numberOfValues = Object.values(userToUpdate).filter(Boolean).length;
     if (numberOfValues === 0)
       return res.status(400).json({
         error: {
-          message: 'Request body is missing the required fields',
+          message: "Request body is missing the required fields",
         },
       });
 
-    UserProfileService.updateUserProfile(req.app.get('db'), req.params.id, userToUpdate)
+    UserProfileService.updateUserProfile(
+      req.app.get("db"),
+      req.params.id,
+      userToUpdate
+    )
       .then((numRowsAffected) => {
         res.status(204).end();
       })
