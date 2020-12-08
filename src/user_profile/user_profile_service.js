@@ -1,7 +1,5 @@
 /* eslint-disable strict */
 
-
-
 const UserProfileService = {
   getUserProfile(knex) {
     return knex.select('*').from('user_profile');
@@ -18,7 +16,12 @@ const UserProfileService = {
   },
 
   getById(knex, id) {
-    return knex.from('user_profile').select('*').where('id', id).first();
+    return knex
+      .from('users as a')
+      .join('user_profile as b', 'a.id', 'b.user_id')
+      .where('a.id', id)
+      .select('*')
+      .first();
   },
 
   deleteUserProfile(knex, id) {

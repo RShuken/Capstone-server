@@ -61,8 +61,10 @@ npm install winston for error logging
 
 # when using psql
 
-to create a db:
+`to create a db:`
 createdb -U dunder_mifflin dbName -- in the command line to create a DB
+createdb -U ryan connectful
+createdb -U ryan connectful_test
 
 # db migrations
 
@@ -86,9 +88,11 @@ then do a npm run migrate to update the DBs. Remember that in the .env files you
 # seeding your DB
 
 to seed: make a seeds folder and place the files inside. naming convention is seed.bdName_tableName.sql
-psql -U dunder_mifflin -d dbName -f ./seeds/seed.blogful_articles.sql - do this in the command line not in psql
+psql -U dunder_mifflin -d dbName -f ./seeds/seed.blogful_articles.sql - do this in the  cmd command line not in psql
 
 !~when seeding do not use double quotes, only use single quotes~!
+
+`psql -U userName -d databaseName -f ./fileName.sql`
 
 # other useful things to remember
 
@@ -130,26 +134,34 @@ values ('','','','','',);
 
 you don't need to change the test_DB_URL because we don't use it in production.
 
-2.  then manual check the `package.json` and make sure that you have` postgrator` into the `dependencies`, also be sure to remove postgrator from the dev dependencies or else this means we can't migrate the files in the server.
+2.  then manual check the `package.json` and make sure that you have `postgrator` into the `dependencies`, also be sure to remove postgrator from the dev dependencies or else this means we can't migrate the files in the server.
 
-3. Now create a new Heroku instance with `heroku create`
+3.  Now create a new Heroku instance with `heroku create`
 
-3.  now push to github, then do a push to heroku with
-    `git push heroku main` _user master if the branch is called master_
+4.  now push to github, then do a push to heroku with
+    `git push heroku main` _use master if the branch is called master_
 
-4.  now lets create the db with a free hobby version in heroku. type into the git bash or the command line
+5.  now lets create the db with a free hobby version in heroku. type into the git bash or the command line
     `heroku addons: create heroku-postgresql:hobby-dev`
     this adds a database to our server so we can start doing migrations inside of it and seed it.
 
-5.  now `seed` the db on the server by following these steps
+5.  a now we need to migrate the DB type `npm run migrate:production` or we type `heroku run npm run migrate` to get started on the migration.
+
+5.b: now set env vairables for heroku - need to fill this out
+
+6.  now `seed` the db on the server by following these steps
     a. Open terminal or Git Bash and `CD into the seeds folder`.
     b. now type `cat <file.name> | heroku pg:psql` remove the <> around the file name. This will tell you it works by outputting 'insert' a few times
 
-we type `heroku run npm run migrate` to get started on the migration.
+
 
 `heroku pg:psql` is a handy tool that will get us into the shell there. Then we can do \dt to see the tables in heroku
-
 
 # Before turning in the capstone
 
 flush the heroku DB and then provide them the new mock data files
+
+
+# Demo Accounts: 
+Login: mentee@gmail.com Pass: test
+Login: mentor@gmail.com Pass: test

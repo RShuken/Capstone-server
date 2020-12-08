@@ -1,14 +1,14 @@
 
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (1, true, false, '1', 1, 1);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (2, true, true, '2', 2, 2);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (3, false, true, '3', 3, 3);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (4, true, true, '4', 4, 4);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (5, false, true, '5', 5, 5);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (6, false, true, '5', 6, 6);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (7, true, true, '3', 7, 7);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (8, false, true, '2', 8, 8);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (9, true, false, '3', 9, 9);
-insert into user_connections (id, blocked, flagged, rating, user_id, connection_id) values (10, true, true, '1', 10, 10);
+insert into user_connections (user_id, connection_id, match_status, connection_message) values (1, 2, 'pending', 'please connect with me');
+insert into user_connections (user_id, connection_id, match_status, connection_message) values (2, 1, 'pending', 'please connect with me');
+insert into user_connections (user_id, connection_id, match_status, connection_message) values (3, 1, 'pending', 'please connect with me');
+insert into user_connections (user_id, connection_id, match_status, connection_message) values (4, 4, 'pending', 'please connect with me');
+insert into user_connections (user_id, connection_id, match_status) values (5, 5, 'accepted');
+insert into user_connections (user_id, connection_id, match_status) values (6, 6, 'accepted');
+insert into user_connections (user_id, connection_id, match_status) values (7, 7, 'accepted');
+insert into user_connections (user_id, connection_id, match_status) values (8, 8, 'denied');
+insert into user_connections (user_id, connection_id, match_status) values (9, 9, 'denied');
+insert into user_connections (user_id, connection_id, match_status) values (10, 10, 'denied');
 
 
 -- to seed run

@@ -13,10 +13,9 @@ const serializeConnection = (user) => ({
   open_sessions: user.open_sessions,
   profession: user.profession,
   location: xss(user.location),
-  time_zone: user.time_zone,
-  current_job_title: xss(user.current_job_title),
-  current_job_company: xss(user.current_job_company),
-  current_job_description: xss(user.current_job_description)
+  job_title: xss(user.job_title),
+  job_company: xss(user.job_company),
+  job_description: xss(user.job_description)
 });
 
 publicViewRouter

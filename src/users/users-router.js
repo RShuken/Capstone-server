@@ -1,6 +1,5 @@
 /* eslint-disable strict */
 
-
 const path = require('path');
 const express = require('express');
 const xss = require('xss');
@@ -14,9 +13,9 @@ const serializeUser = (user) => ({
   name: xss(user.name),
   email: xss(user.email),
   is_mentor: user.is_mentor,
+  password: user.password,
   join_date: user.join_date,
   open_sessions: user.open_sessions,
-  password: user.password,
 });
 
 usersRouter
@@ -62,7 +61,7 @@ usersRouter
       .then((user) => {
         if (!user) {
           return res.status(404).json({
-            error: { message: 'User doesn\'t exist' },
+            error: { message: 'User does not exist' },
           });
         }
         res.user = user;
@@ -88,7 +87,8 @@ usersRouter
     if (numberOfValues === 0)
       return res.status(400).json({
         error: {
-          message: 'Request body must contain either \'name\', \'email\', \'password\', \'is_mentor\' or \'open_sessions\'',
+          message:
+            'Request body must contain either \'name\', \'email\', \'password\', \'is_mentor\' or \'open_sessions\'',
         },
       });
 

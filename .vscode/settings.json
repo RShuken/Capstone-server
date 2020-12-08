@@ -1,8 +1,12 @@
 {
     "cSpell.words": [
+        "connectful",
+        "connectful test",
         "noteful",
         "postgrator",
-        "predeploy"
+        "postgresql",
+        "predeploy",
+        "test"
     ],
     "cSpell.ignoreWords": [
         "supertest"

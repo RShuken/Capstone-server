@@ -3,7 +3,7 @@ alter table if exists users
 drop column id;
 
 --drop tables in reverse order to make sure we have clean data bases to work with
-drop table if exists users;
+drop table if exists users cascade;
 
 --create the project table that is the most independent table
 create table users (
