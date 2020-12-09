@@ -45,7 +45,7 @@ connectionsRouter
       .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
-    console.log('this is the req.body ',req.body)
+    console.log('this is the req.body ', req.body);
     const { connection_message, id } = req.body;
     ConnectionsService.newUpdateConnection(
       req.app.get('db'),
@@ -57,6 +57,18 @@ connectionsRouter
       })
       .catch(next);
   });
+
+connectionsRouter.route('/count').get((req, res, next) => {
+  const knexInstance = req.app.get('db');
+  ConnectionsService.getCountAllConnectionsPendingById(
+    knexInstance,
+    req.session.user.id
+  )
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(next);
+});
 
 connectionsRouter
   .route('/:connection_id')
@@ -75,17 +87,18 @@ connectionsRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const { match_status } = req.body;
-    ConnectionsService.newUpdateConnection(
+    console.log('this is the id of the connection', req.params.connection_id);
+    ConnectionsService.newUpdateStatusConnection(
       req.app.get('db'),
       req.params.connection_id,
-      {
-        match_status,
-      }
+      match_status
     )
       .then((connection) => {
         res.json(connection);
       })
       .catch(next);
   });
+
+
 
 module.exports = connectionsRouter;

@@ -26,12 +26,20 @@ const ConnectionsService = {
       .join('users as b', 'b.id', '=', 'a.user_id')
       .where('a.connection_id', id)
       .where('a.match_status', 'pending')
-      .select('a.id','a.match_status','a.connection_message','a.user_id','a.connection_id','b.name','b.open_sessions');
+      .select(
+        'a.id',
+        'a.match_status',
+        'a.connection_message',
+        'a.user_id',
+        'a.connection_id',
+        'b.name',
+        'b.open_sessions'
+      );
   },
-  getAllConnectionsPendingById(knex, id) {
+  getCountAllConnectionsPendingById(knex, id) {
     return knex
-      .from('user_connections as a')
-      .where('a.match_status', 'pending')
+      .from('user_connections')
+      .where('match_status', 'pending')
       .where('connection_id', id)
       .count();
   },
@@ -47,8 +55,16 @@ const ConnectionsService = {
   deleteConnection(knex, id) {
     return knex('user_connections').where({ id }).delete();
   },
+  newUpdateStatusConnection(knex, id, newConnectionFields) {
+    return knex('user_connections')
+      .where('id', id)
+      .update('match_status', newConnectionFields)
+      .returning('*')
+      .then((rows) => {
+        return rows[0];
+      });
+  },
   newUpdateConnection(knex, id, newConnectionFields) {
-    console.log('this is the id and the message', id, newConnectionFields)
     return knex('user_connections')
       .where('id', id)
       .update('connection_message', newConnectionFields)
