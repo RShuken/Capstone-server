@@ -35,6 +35,25 @@ connectionsRouter
       user_id,
       connection_id,
     };
+    // this loops through the request data and throws an error if something is missing. 
+    for (const [key, value] of Object.entries(newConnection)) {
+      if (!value && typeof value !== 'boolean') {
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` },
+        });
+      }
+    }
+
+    const connectionToUpdate = { match_status, user_id, connection_id };
+    const numberOfValues = Object.values(connectionToUpdate).filter(Boolean)
+      .length;
+    if (numberOfValues === 0)
+      return res.status(400).json({
+        error: {
+          message: 'Request body is missing the required fields',
+        },
+      });
+
     ConnectionsService.insertConnection(req.app.get('db'), newConnection)
       .then((connection) => {
         res
@@ -45,12 +64,12 @@ connectionsRouter
       .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
-    console.log('this is the req.body ', req.body);
     const { connection_message, id } = req.body;
+    console.log('this is the request info', connection_message, id)
     ConnectionsService.newUpdateConnection(
       req.app.get('db'),
       id,
-      connection_message.connection_message
+      connection_message
     )
       .then((connection) => {
         res.status(204).end();
@@ -65,7 +84,7 @@ connectionsRouter.route('/count').get((req, res, next) => {
     req.session.user.id
   )
     .then((data) => {
-      res.json(data);
+      res.json(data[0]);
     })
     .catch(next);
 });
@@ -87,7 +106,6 @@ connectionsRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const { match_status } = req.body;
-    console.log('this is the id of the connection', req.params.connection_id);
     ConnectionsService.newUpdateStatusConnection(
       req.app.get('db'),
       req.params.connection_id,
@@ -98,7 +116,5 @@ connectionsRouter
       })
       .catch(next);
   });
-
-
 
 module.exports = connectionsRouter;

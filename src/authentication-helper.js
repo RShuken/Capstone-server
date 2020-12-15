@@ -1,4 +1,3 @@
-'use strict';
 const jwt = require('jsonwebtoken');
 const UsersService = require('./users/users-service');
 
@@ -21,7 +20,7 @@ const verifyAuthTokens = async (req, res, next) => {
     req.headers['authorization'] || req.cookies['authorization'];
   let userId = req.headers['user-id'];
   if (!accessToken) {
-    res.status(403).json({ msg: 'Access token is missing' });
+    return res.status(403).json({ msg: 'Access token is missing' });
   }
 
   let payload = null;

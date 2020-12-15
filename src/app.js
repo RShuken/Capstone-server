@@ -1,5 +1,3 @@
-'use strict';
-
 require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
@@ -42,6 +40,11 @@ app.use(
   })
 );
 
+// default route
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
+
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -71,9 +74,9 @@ app.post('/login', async (req, res) => {
   res.json({ ...userAccount, accessToken });
 });
 
-app.post('/signup', function (req, res) {
+app.post('/signup', async (req, res) => {
   const { name, email, password, is_mentor, open_sessions } = req.body;
-  const userAccount = UsersService.getByEmail(app.get('db'), email);
+  const userAccount = await UsersService.getByEmail(app.get('db'), email);
   if (userAccount) {
     res.status(400).json({ msg: 'User already exists! Try login' });
   } else {
@@ -83,18 +86,22 @@ app.post('/signup', function (req, res) {
       password,
       is_mentor,
       open_sessions,
-    }).then((data) => {
-      let accessToken = AuthHelpers.createAccessToken({ email });
-      let refreshToken = AuthHelpers.createRefreshToken({ email });
-
-      req.session.user = data;
-      req.session.user.refreshToken = refreshToken;
-      res.cookie('Authorization', accessToken, {
-        secure: true,
-        httpOnly: true,
+    })
+      .then((data) => {
+        let accessToken = AuthHelpers.createAccessToken({ email });
+        let refreshToken = AuthHelpers.createRefreshToken({ email });
+        req.session.user = data;
+        req.session.user.refreshToken = refreshToken;
+        res.cookie('authorization', accessToken, {
+          secure: true,
+          httpOnly: true,
+        });
+        res.status(200).json(data);
+        res.send();
+      })
+      .catch((e) => {
+        console.log(e);
       });
-      res.send();
-    });
   }
 });
 
@@ -106,7 +113,7 @@ app.post('/logout', function (req, res) {
 
 // these are the public routes
 app.use('/api/public', publicViewRouter);
-app.use('/api/public_mentors', publicAllMentorsViewRouter);
+//app.use('/api/public_mentors', publicAllMentorsViewRouter);
 // this is the authentication layer
 app.use(AuthHelpers.verifyAuthTokens);
 // below are private routes
@@ -114,12 +121,6 @@ app.use(AuthHelpers.verifyAuthTokens);
 app.use('/api/users', usersRouter);
 app.use('/api/connections', connectionsRouter);
 app.use('/api/user_profile', userProfileRouter);
-
-// default route
-
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
 
 // error handlers
 app.use(function errorHandler(error, req, res, next) {

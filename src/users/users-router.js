@@ -31,10 +31,8 @@ usersRouter
   .post(jsonParser, (req, res, next) => {
     const { name, email, password, is_mentor, open_sessions } = req.body;
     const newUser = { name, email, password, is_mentor, open_sessions };
-
     for (const [key, value] of Object.entries(newUser)) {
-      // eslint-disable-next-line
-      if (value == null) {
+      if (!value && typeof value !== 'boolean') {
         return res.status(400).json({
           error: { message: `Missing '${key}' in request body` },
         });
@@ -88,7 +86,7 @@ usersRouter
       return res.status(400).json({
         error: {
           message:
-            'Request body must contain either \'name\', \'email\', \'password\', \'is_mentor\' or \'open_sessions\'',
+            "Request body must contain either 'name', 'email', 'password', 'is_mentor' or 'open_sessions'",
         },
       });
 

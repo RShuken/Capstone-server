@@ -147,7 +147,7 @@ you don't need to change the test_DB_URL because we don't use it in production.
 
 5.  a now we need to migrate the DB type `npm run migrate:production` or we type `heroku run npm run migrate` to get started on the migration.
 
-5.b: now set env vairables for heroku - need to fill this out
+5.b: now set env variables for heroku - need to fill this out
 
 6.  now `seed` the db on the server by following these steps
     a. Open terminal or Git Bash and `CD into the seeds folder`.
