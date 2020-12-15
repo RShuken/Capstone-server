@@ -163,5 +163,5 @@ flush the heroku DB and then provide them the new mock data files
 
 
 # Demo Accounts: 
-Login: mentee@gmail.com Pass: test
-Login: mentor@gmail.com Pass: test
+Login mentee: mentee@gmail.com Pass: test
+Login mentor: mentor@gmail.com Pass: test

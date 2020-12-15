@@ -35,7 +35,7 @@ connectionsRouter
       user_id,
       connection_id,
     };
-    // this loops through the request data and throws an error if something is missing. 
+    // this loops through the request data and throws an error if something is missing.
     for (const [key, value] of Object.entries(newConnection)) {
       if (!value && typeof value !== 'boolean') {
         return res.status(400).json({
@@ -65,7 +65,17 @@ connectionsRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const { connection_message, id } = req.body;
-    console.log('this is the request info', connection_message, id)
+    const newConnectionMessage = {
+      connection_message: connection_message, id: id
+    };
+    // this loops through the request data and throws an error if something is missing.
+    for (const [key, value] of Object.entries(newConnectionMessage)) {
+      if (!value && typeof value !== 'boolean') {
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` },
+        });
+      }
+    }
     ConnectionsService.newUpdateConnection(
       req.app.get('db'),
       id,
@@ -84,6 +94,7 @@ connectionsRouter.route('/count').get((req, res, next) => {
     req.session.user.id
   )
     .then((data) => {
+      res.status(200)
       res.json(data[0]);
     })
     .catch(next);
@@ -106,12 +117,21 @@ connectionsRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const { match_status } = req.body;
+    const newMatch = { match_status: match_status}
+    for (const [key, value] of Object.entries(newMatch)) {
+      if (!value && typeof value !== 'boolean') {
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` },
+        });
+      }
+    }
     ConnectionsService.newUpdateStatusConnection(
       req.app.get('db'),
       req.params.connection_id,
       match_status
     )
       .then((connection) => {
+        res.status(204)
         res.json(connection);
       })
       .catch(next);
