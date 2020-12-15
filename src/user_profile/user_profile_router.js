@@ -83,7 +83,6 @@ userProfileRouter.get('/profile', (req, res, next) => {
           error: { message: 'User does not exist' },
         });
       }
-
       res.json(serializeUser(user));
     })
     .catch(next);
@@ -146,13 +145,34 @@ userProfileRouter
         },
       });
 
+    const newProfileData = {
+      id: id,
+      profession: profession,
+      phone: phone,
+      discord_id: discord_id,
+      location: location,
+      job_title: job_title,
+      job_company: job_company,
+      job_description: job_description,
+      user_id: user_id,
+    };
+    // this loops through the request data and throws an error if something is missing.
+    for (const [key, value] of Object.entries(newProfileData)) {
+      if (!value && typeof value !== 'boolean') {
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` },
+        });
+      }
+    }
+
     UserProfileService.updateUserProfile(
       req.app.get('db'),
       req.params.id,
       userToUpdate
     )
       .then((numRowsAffected) => {
-        res.status(204).end();
+        res.status(204);
+        res.json(numRowsAffected).end();
       })
       .catch(next);
   });
