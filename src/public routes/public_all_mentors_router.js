@@ -1,9 +1,9 @@
-/* eslint-disable strict */
 const express = require('express');
 const xss = require('xss');
 const publicAllMentorsViewRouter = express.Router();
 const PublicAllMentorsServices = require('./public_all_mentors_service');
 
+// this is the public route 
 const serializeConnection = (user) => ({
   id: user.id,
   name: xss(user.name),
