@@ -1,5 +1,5 @@
-'use strict';
 
+// this service joins the 'users' and the 'user_profile' tables then returns all where 'is_mentor' is true. 
 const PublicServices = {
   getAllMentors(knex) {
     return knex

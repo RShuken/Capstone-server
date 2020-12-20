@@ -13,7 +13,6 @@ const session = require('express-session');
 const AuthHelpers = require('./authentication-helper');
 const UsersService = require('./users/users-service');
 const publicViewRouter = require('./public routes/public_routes_router');
-const publicAllMentorsViewRouter = require('./public routes/public_all_mentors_router');
 
 const app = express();
 

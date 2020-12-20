@@ -1,22 +1,23 @@
-/* eslint-disable strict */
 const express = require('express');
 const ConnectionsService = require('./user_connections-service');
 const xss = require('xss');
 const connectionsRouter = express.Router();
 const jsonParser = express.json();
 
+// this is the user_connections router and handles when a connection is requested, created or updated. I serialize the response based on joining the 'user' table and the 'user_connections' table, and use XSS to prevent injections where user input is allowed. The other connection fields all happen by default and have expected values in the database. 
 const serializeConnection = (connection) => ({
   id: connection.id,
   match_status: connection.match_status,
-  connection_message: connection.connection_message,
+  connection_message: xss(connection.connection_message),
   user_id: connection.user_id,
   connection_id: connection.connection_id,
-  name: connection.name,
+  name: xss(connection.name),
   open_sessions: connection.open_sessions,
 });
 
 connectionsRouter
   .route('/')
+  // simple get request to return a list of all connections based on the user id. 
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     ConnectionsService.getAllConnectionRequestsWithProfileInfoById(
@@ -28,6 +29,7 @@ connectionsRouter
       })
       .catch(next);
   })
+  // this post creates a new user connection, and the default status is always 'pending'. I do not update the connection message here but instead to it in a patch request later. This simply creates the connection once the use clicks the button.
   .post(jsonParser, (req, res, next) => {
     const { match_status, user_id, connection_id } = req.body;
     const newConnection = {
@@ -43,7 +45,6 @@ connectionsRouter
         });
       }
     }
-
     const connectionToUpdate = { match_status, user_id, connection_id };
     const numberOfValues = Object.values(connectionToUpdate).filter(Boolean)
       .length;
@@ -53,7 +54,6 @@ connectionsRouter
           message: 'Request body is missing the required fields',
         },
       });
-
     ConnectionsService.insertConnection(req.app.get('db'), newConnection)
       .then((connection) => {
         res
@@ -63,6 +63,7 @@ connectionsRouter
       })
       .catch(next);
   })
+  // this patch request is what I use to update the connection message that is sent to the corresponding user. I use this when a user finishes writing the connection message. I know I could have made the post request do this but I wanted to learn and be able to do a patch request as well as a post. 
   .patch(jsonParser, (req, res, next) => {
     const { connection_message, id } = req.body;
     const newConnectionMessage = {
@@ -86,7 +87,7 @@ connectionsRouter
       })
       .catch(next);
   });
-
+// this the request that returns the number of 'pending' request based on the user_connections table.
 connectionsRouter.route('/count').get((req, res, next) => {
   const knexInstance = req.app.get('db');
   ConnectionsService.getCountAllConnectionsPendingById(

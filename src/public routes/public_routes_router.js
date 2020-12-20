@@ -1,9 +1,10 @@
-/* eslint-disable strict */
 const express = require('express');
 const xss = require('xss');
 const publicViewRouter = express.Router();
 const PublicServices = require('./public_routes_service');
 
+// this is the public route for fetch request that return a list of mentors to populate the dashboard. 
+// here I serialize the results from a sql request that joins two tables and return only the data that is ok to be public. 
 const serializeConnection = (user) => ({
   id: user.id,
   name: xss(user.name),
