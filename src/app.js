@@ -13,7 +13,6 @@ const session = require('express-session');
 const AuthHelpers = require('./authentication-helper');
 const UsersService = require('./users/users-service');
 const publicViewRouter = require('./public routes/public_routes_router');
-const { CLIENT_ORIGIN } = require('./config');
 
 
 const app = express();
@@ -25,7 +24,7 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(
   cors({
-    origin: CLIENT_ORIGIN,
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
   })
 );
 app.use(bodyParser.json());
