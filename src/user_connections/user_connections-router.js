@@ -4,7 +4,7 @@ const xss = require('xss');
 const connectionsRouter = express.Router();
 const jsonParser = express.json();
 
-// this is the user_connections router and handles when a connection is requested, created or updated. I serialize the response based on joining the 'user' table and the 'user_connections' table, and use XSS to prevent injections where user input is allowed. The other connection fields all happen by default and have expected values in the database. 
+// this is the user_connections router and handles when a connection is requested, created or updated. I serialize the response based on joining the 'user' table and the 'user_connections' table, and use XSS to prevent injections where user input is allowed. The other connection fields all happen by default and have expected values in the database.
 const serializeConnection = (connection) => ({
   id: connection.id,
   match_status: connection.match_status,
@@ -17,7 +17,7 @@ const serializeConnection = (connection) => ({
 
 connectionsRouter
   .route('/')
-  // simple get request to return a list of all connections based on the user id. 
+  // simple get request to return a list of all connections based on the user id.
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     ConnectionsService.getAllConnectionRequestsWithProfileInfoById(
@@ -63,11 +63,12 @@ connectionsRouter
       })
       .catch(next);
   })
-  // this patch request is what I use to update the connection message that is sent to the corresponding user. I use this when a user finishes writing the connection message. I know I could have made the post request do this but I wanted to learn and be able to do a patch request as well as a post. 
+  // this patch request is what I use to update the connection message that is sent to the corresponding user. I use this when a user finishes writing the connection message. I know I could have made the post request do this but I wanted to learn and be able to do a patch request as well as a post.
   .patch(jsonParser, (req, res, next) => {
     const { connection_message, id } = req.body;
     const newConnectionMessage = {
-      connection_message: connection_message, id: id
+      connection_message: connection_message,
+      id: id,
     };
     // this loops through the request data and throws an error if something is missing.
     for (const [key, value] of Object.entries(newConnectionMessage)) {
@@ -95,7 +96,7 @@ connectionsRouter.route('/count').get((req, res, next) => {
     req.session.user.id
   )
     .then((data) => {
-      res.status(200)
+      res.status(200);
       res.json(data[0]);
     })
     .catch(next);
@@ -118,7 +119,7 @@ connectionsRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const { match_status } = req.body;
-    const newMatch = { match_status: match_status}
+    const newMatch = { match_status: match_status };
     for (const [key, value] of Object.entries(newMatch)) {
       if (!value && typeof value !== 'boolean') {
         return res.status(400).json({
@@ -132,7 +133,7 @@ connectionsRouter
       match_status
     )
       .then((connection) => {
-        res.status(204)
+        res.status(204);
         res.json(connection);
       })
       .catch(next);

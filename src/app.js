@@ -110,10 +110,10 @@ app.post('/logout', function (req, res) {
   res.status(200);
 });
 
-// these are the public routes
+//these are the public routes
 app.use('/api/public', publicViewRouter);
 //app.use('/api/public_mentors', publicAllMentorsViewRouter);
-// this is the authentication layer
+//this is the authentication layer
 app.use(AuthHelpers.verifyAuthTokens);
 // below are private routes
 // routes for all CRUD commands to the server

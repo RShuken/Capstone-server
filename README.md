@@ -1,17 +1,407 @@
-# Express Boilerplate!
+# Connectful Server
 
-This is a boilerplate project used for starting new projects!
+live app: https:
 
-## Set up
+# Built With
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+Node
+Express
+Javascript
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+# API Documentations
+
+Server BASE URL: https://localhost:8000
+
+`Public Route GET /api/public`
+Returns a filtered list of mentors to display on the dashboard page
+
+Example request and response structure:
+
+GET http://localhost:8000/api/public
+
+`response: 200 ok
+
+[
+{
+"id": 5,
+"name": "Eulalie Germain",
+"email": "test3@gmail.com",
+"is_mentor": true,
+"join_date": "2019-11-13T00:00:00.000Z",
+"open_sessions": 2,
+"profession": "UI UX",
+"location": "Timurjaya",
+"job_title": "Head of Development",
+"job_company": "AMD",
+"job_description": "I design beautiful technology in order to make peoples lives better"
+},
+{
+"id": 6,
+"name": "Ronnie Sinncock",
+"email": "test4@gmail.com",
+"is_mentor": true,
+"join_date": "2020-05-11T00:00:00.000Z",
+"open_sessions": 1,
+"profession": "Frontend Development",
+"location": "BardaÃ¯",
+"job_title": "CTO",
+"job_company": "IBM",
+"job_description": "I love programming and in my job I get to work with AI and ML tech to build the robots of the future"
+},
+]`
+
+`POST /login`
+Requires the email and password to be passed in the body. This will login a user and verify them with JWT
+
+Example request and response structure:
+
+POST: http://localhost:8000/login
+
+response: 422
+
+`POST /signup`
+Requires the name, email, password, is_mentor, and open_sessions to be passed in the body. This will register a new user to the platform.
+
+Example request and response structure:
+
+POST: http://localhost:8000/signup
+
+response: 200 ok
+
+`POST /logout`
+This deletes the local cookie and deletes the server session key to log out the user.
+
+Example request and response structure:
+
+POST: http://localhost:8000/logout
+
+response: 200 ok
+
+`GET /api/users`
+Returns a filtered array of names of users and their information.
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/users
+
+response 200 ok
+
+[
+{
+"id": 1,
+"name": "Ryan",
+"email": "mentee@gmail.com",
+"is_mentor": false,
+"password": "test",
+"join_date": "2020-06-05T00:00:00.000Z",
+"open_sessions": 3
+},
+{
+"id": 2,
+"name": "Ava",
+"email": "mentor@gmail.com",
+"is_mentor": true,
+"password": "test",
+"join_date": "2020-04-23T00:00:00.000Z",
+"open_sessions": 3
+},
+]`
+
+`POST /api/users`
+Adds a person to the user list. Requires the name, email, password, is_mentor, and open_sessions in the body.
+
+Example request and response structure:
+
+POST: http://localhost:8000/api/users
+
+response 201
+
+`GET /api/users/:user_id`
+Returns a the user information of the user number passed in the path link.
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/users/2
+
+response 204
+
+{
+"id": 2,
+"name": "Ava",
+"email": "mentor@gmail.com",
+"is_mentor": true,
+"password": "test",
+"join_date": "2020-04-23T00:00:00.000Z",
+"open_sessions": 3
+}`
+
+`DELETE /api/users/:user_id`
+Deletes the user id in the path link.
+
+Example request and response structure:
+
+`DELETE: http://localhost:8000/api/users/2
+
+response 204
+
+{
+"id": 2,
+"name": "Ava",
+"email": "mentor@gmail.com",
+"is_mentor": true,
+"password": "test",
+"join_date": "2020-04-23T00:00:00.000Z",
+"open_sessions": 3
+}`
+
+`PATCH /api/users/:user_id`
+Updates the user profile number in the path link. This does not require anything in the body, but to update it needs one of the name, password, email, is_mentor, and open_sessions. If a value is present it will be updated.
+
+Example request and response structure:
+
+`PATCH: http://localhost:8000/api/users/2
+
+response 204`
+
+`GET /api/connections`
+Returns all user connections based on the user id saved in local session data. Requires the user id to be sent in the session storage.
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/connections
+
+response 200 ok
+
+[
+{
+"id": 42,
+"match_status": "pending",
+"connection_message": "Hello! I'm a student at Thinkful coding bootcamp and I am looking for a mentor to meet with once a week. Do you have time?",
+"user_id": 1,
+"connection_id": 2,
+"name": "Ryan",
+"open_sessions": 3
+}
+]`
+
+`POST /api/connections`
+Creates a new connection, requires the match_status, user_id, and connection_id to be passed in the body.
+
+Example request and response structure:
+
+`POST: http://localhost:8000/api/connections
+
+response 201`
+
+`PATCH /api/connections`
+Updates a connection with he connection message. Requires the connection_message and the id of the connection to be in the body.
+
+Example request and response structure:
+
+`PATCH: http://localhost:8000/api/connections
+
+response 200 ok
+
+    {
+        "id": 42,
+        "connection_message": "Hello! I'm a student at Thinkful coding bootcamp and I am looking for a mentor to meet with once a week. Do you have time?",
+        "connection_id": 2,
+    }`
+
+`GET /api/connections/count`
+Returns the number of pending connections for a user. Requires the user id to be saved in local session storage to be accessible.
+
+Example request and response structure:
+
+`POST: http://localhost:8000/api/connections/count
+
+response 200
+
+[
+{count: 2}
+]`
+
+`GET /api/connections/:connection_id`
+Returns the connection based on the id passed in the path link.
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/connections/2
+
+response 200 ok
+
+    {
+        "id": 42,
+        "connection_message": "Hello! I'm a student at Thinkful coding bootcamp and I am looking for a mentor to meet with once a week. Do you have time?",
+        "connection_id": 2,
+    }`
+
+`PATCH /api/connections/:connection_id`
+Updates the match status of the connection id sent in the path link. Requires a match_status to be passed in the body and it can only take these values: 'pending', 'accepted' or 'denied'
+
+Example request and response structure:
+
+`PATCH: http://localhost:8000/api/connections/2
+
+response 204
+
+{
+"match_status": 'pending'
+}`
+
+`GET /api/user_profile`
+Returns all user profile information on the server. 
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/user_profile
+
+response 200 ok
+
+[
+    {
+        "id": 1,
+        "profession": "Backend Development",
+        "phone": "451-755-8850",
+        "discord_id": "Fundamental",
+        "location": "SÃ¶dra Sandby",
+        "job_title": "UI Lead",
+        "job_company": "AMD",
+        "job_description": "I love programming and in my job I get to work with AI and ML tech to build the robots of the future",
+        "user_id": 1
+    },
+    {
+        "id": 3,
+        "profession": "Backend Development",
+        "phone": "382-170-3814",
+        "discord_id": "Managed",
+        "location": "Pellegrini",
+        "job_title": "Dev Ops Director",
+        "job_company": "IBM",
+        "job_description": "I run highly skilled teams of developers to break new ground using cutting edge technology",
+        "user_id": 3
+    }
+]`
+
+`POST /api/user_profile`
+Adds a new user profile to the database, it requires the id, profession, phone, discord_id, location, job_title, job_company job_description, and user_id to be in the body. 
+
+Example request and response structure:
+
+`POST: http://localhost:8000/api/connections/2
+
+response 201
+items in body:
+{
+      id,
+      profession,
+      phone,
+      discord_id,
+      location,
+      job_title,
+      job_company,
+      job_description,
+      user_id,
+}`
+
+`GET /api/user_profile/profile`
+Returns returns the user profile based on the user id saved in the local session data. Requires a user id to be saved in local session.
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/user_profile/profile
+
+response 200 ok
+
+[
+    {
+        "id": 1,
+        "profession": "Backend Development",
+        "phone": "451-755-8850",
+        "discord_id": "Fundamental",
+        "location": "SÃ¶dra Sandby",
+        "job_title": "UI Lead",
+        "job_company": "AMD",
+        "job_description": "I love programming and in my job I get to work with AI and ML tech to build the robots of the future",
+        "user_id": 1
+    }
+]`
+
+`GET /api/user_profile/:id`
+Returns all the user profile based on the id added to the end of the path link.
+
+Example request and response structure:
+
+`GET: http://localhost:8000/api/user_profile/2
+
+response 200 ok
+
+[
+    {
+        "id": 1,
+        "profession": "Backend Development",
+        "phone": "451-755-8850",
+        "discord_id": "Fundamental",
+        "location": "SÃ¶dra Sandby",
+        "job_title": "UI Lead",
+        "job_company": "AMD",
+        "job_description": "I love programming and in my job I get to work with AI and ML tech to build the robots of the future",
+        "user_id": 1
+    }
+]`
+
+`DELETE /api/user_profile/:id`
+Deletes the user added to the end of the path link. 
+
+Example request and response structure:
+
+`DELETE: http://localhost:8000/api/user_profile/2
+
+response 204
+`
+`PATCH /api/user_profile/:id`
+Updates the user profile based on the id passed through the path link. Requires the id, profession, phone, discord_id, location, job_title, job_company job_description, and user_id to be in the body. 
+
+Example request and response structure:
+
+`PATCH: http://localhost:8000/api/user_profile/2
+
+response 204
+Example body:
+{
+      id,
+      profession,
+      phone,
+      discord_id,
+      location,
+      job_title,
+      job_company,
+      job_description,
+      user_id,
+    }
+`
+
+
+## Local dev setup
+
+If using user `dunder-mifflin`:
+
+```bash
+mv example.env .env
+createdb -U dunder-mifflin connectful
+createdb -U dunder-mifflin connectful-test
+```
+
+If your `dunder-mifflin` user has a password be sure to set it in `.env` for all appropriate fields. Or if using a different user, update appropriately.
+
+```bash
+npm install
+npm run migrate
+env TEST_DATABASE_URL=connectful-test npm run migrate
+```
+
+And `npm test` should work at this point
+
 
 ## Scripts
 
@@ -19,149 +409,8 @@ Start the application `npm start`
 
 Start nodemon for the application `npm run dev`
 
-Run the tests `npm test`
+Run the tests mode `npm test`
 
-## Deploying
+Run the migrations up `npm run migrate`
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
-
-# essential packages to install
-
-npm install
-make a .env file and add TEST_DB_URL and the DB_URL that direct to your DB in localhost
-NODE_ENV=development
-PORT=8000
-TEST_DB_URL="postgresql://dunder_mifflin@localhost/noteful_test"
-DB_URL="postgresql://dunder_mifflin@localhost/noteful"
-npm i cors
-npm i eslint
-npm i express
-npm i morgan
-npm i nodemon
-
-# database
-
-npm i knex
-npm i pg
-npm i dotenv
-
-# validation and security
-
-npm i xss for validating inputs
-npm i helmet
-
-# testing
-
-npm i mocha
-npm i chai
-npm i supertest
-npm install winston for error logging
-
-# migrations and DB
-
-# when using psql
-
-`to create a db:`
-createdb -U dunder_mifflin dbName -- in the command line to create a DB
-createdb -U ryan connectful
-createdb -U ryan connectful_test
-
-# db migrations
-
-run it with || npm run migrate ||
-
-npm i postgrator-cli@3.2.0 -D make a migrations folder, the file naming convention is 001.do.create*(tableName or thing you are creating) and 0001.undo.create*(same name as the do file)
-
-then you need to make a postgrator-config.js file with
-require('dotenv').config();
-
-                    module.exports = {
-                    migrationsDirectory: 'migrations',
-                    driver: 'pg',
-                    'connectionString': (process.env.NODE_ENV === 'test')
-                        ? process.env.TEST_DB_URL
-                        : process.env.DB_URL,
-                    };
-
-then do a npm run migrate to update the DBs. Remember that in the .env files you need to direct towards the db you want as well.
-
-# seeding your DB
-
-to seed: make a seeds folder and place the files inside. naming convention is seed.bdName_tableName.sql
-psql -U dunder_mifflin -d dbName -f ./seeds/seed.blogful_articles.sql - do this in the  cmd command line not in psql
-
-!~when seeding do not use double quotes, only use single quotes~!
-
-`psql -U userName -d databaseName -f ./fileName.sql`
-
-# other useful things to remember
-
-When cloning :
-git clone https://github.com/[YOUR-USERNAME]/express-boilerplate.git blogful-api
-cd \$\_
-rm -rf .git && git init
-mv example.env .env
-npm install
-git add -A && git commit -m 'first commit'
-
-# db table syntax
-
--- first remove any foreign key constraints
-alter table if exists folders
-drop column id;
-
---drop tables to make sure the tables will be clean
-drop table if exists notes;
-
---create the project table that is the most independent table
-create table notes (
-id integer primary key generated by default as identity,
-note_name text not null,
-content text not null,
-date_added TIMESTAMPTZ default now() not null
-)
-
-# db seeding syntax
-
-insert into dbTableName ( id, note_name, content, date_added, folder_id )
-values ('','','','','',);
-
-# BEFORE DEPLOY
-
-`heroku important steps`
-
-1.  change the database url to `DATABASE_URL` from `DB_URL`
-
-you don't need to change the test_DB_URL because we don't use it in production.
-
-2.  then manual check the `package.json` and make sure that you have `postgrator` into the `dependencies`, also be sure to remove postgrator from the dev dependencies or else this means we can't migrate the files in the server.
-
-3.  Now create a new Heroku instance with `heroku create`
-
-4.  now push to github, then do a push to heroku with
-    `git push heroku main` _use master if the branch is called master_
-
-5.  now lets create the db with a free hobby version in heroku. type into the git bash or the command line
-    `heroku addons: create heroku-postgresql:hobby-dev`
-    this adds a database to our server so we can start doing migrations inside of it and seed it.
-
-5.  a now we need to migrate the DB type `npm run migrate:production` or we type `heroku run npm run migrate` to get started on the migration.
-
-5.b: now set env variables for heroku - need to fill this out
-
-6.  now `seed` the db on the server by following these steps
-    a. Open terminal or Git Bash and `CD into the seeds folder`.
-    b. now type `cat <file.name> | heroku pg:psql` remove the <> around the file name. This will tell you it works by outputting 'insert' a few times
-
-
-
-`heroku pg:psql` is a handy tool that will get us into the shell there. Then we can do \dt to see the tables in heroku
-
-# Before turning in the capstone
-
-flush the heroku DB and then provide them the new mock data files
-
-
-# Demo Accounts: 
-Login mentee: mentee@gmail.com Pass: test
-Login mentor: mentor@gmail.com Pass: test
+Run the migrations down `npm run migrate -- 0`

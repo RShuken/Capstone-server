@@ -6,6 +6,7 @@
         "postgrator",
         "postgresql",
         "predeploy",
+        "signup",
         "test"
     ],
     "cSpell.ignoreWords": [
