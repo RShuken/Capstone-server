@@ -6,6 +6,7 @@
         "postgrator",
         "postgresql",
         "predeploy",
+        "resave",
         "signup",
         "test"
     ],

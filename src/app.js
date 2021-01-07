@@ -13,6 +13,8 @@ const session = require('express-session');
 const AuthHelpers = require('./authentication-helper');
 const UsersService = require('./users/users-service');
 const publicViewRouter = require('./public routes/public_routes_router');
+const { CLIENT_ORIGIN } = require('./config');
+
 
 const app = express();
 
@@ -21,7 +23,11 @@ const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 // standard middleware
 app.use(morgan(morganOption));
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -54,7 +60,7 @@ app.post('/login', async (req, res) => {
   );
 
   if (!userAccount) {
-    res.status(403).json({ msg: 'User doesnt exist' });
+    res.status(403).json({ msg: 'User does not exist' });
   } else {
     if (userAccount.password === password) {
     } else {
