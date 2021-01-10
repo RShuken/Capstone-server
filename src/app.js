@@ -59,10 +59,13 @@ app.post('/login', async (req, res) => {
   if (!email || !password) {
     res.status(422).json({ msg: 'Missing Information' });
   }
+
+  (value) => value
+
   const userAccount = await UsersService.getByEmail(app.get('db'), email).then(
     (data) => {
       console.log('this is the data', data);
-      data;
+      return data;
     }
   );
   console.log('this is the user account', userAccount);
