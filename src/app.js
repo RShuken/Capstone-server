@@ -133,7 +133,7 @@ app.post('/logout', function (req, res) {
 app.use('/api/public', publicViewRouter);
 //app.use('/api/public_mentors', publicAllMentorsViewRouter);
 //this is the authentication layer
-//app.use(AuthHelpers.verifyAuthTokens);
+app.use(AuthHelpers.verifyAuthTokens);
 // below are private routes
 // routes for all CRUD commands to the server
 app.use('/api/users', usersRouter);
