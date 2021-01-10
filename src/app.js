@@ -18,12 +18,17 @@ const app = express();
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 
+const origin =
+  NODE_ENV === 'production'
+    ? 'https://connectful-client.vercel.app'
+    : 'http://localhost:3000';
+
 // standard middleware
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+    origin: origin,
   })
 );
 app.use(bodyParser.json());
