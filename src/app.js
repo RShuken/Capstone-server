@@ -54,41 +54,42 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  console.log('this is the body', req.body);
-  if (!email || !password) {
-    res.status(422).json({ msg: 'Missing Information' });
-  }
-  const userAccount = await UsersService.getByEmail(app.get('db'), email).then(
-    (data) => {
-      console.log('this is the data', data);
-      data;
-    }
-  );
-  console.log('this is the user account', userAccount);
-  if (!userAccount) {
-    res.status(403).json({ msg: 'User does not exist' });
-  } else {
-    if (userAccount.password === password) {
-    } else {
-      res.status(403).json({ msg: "Password doesn't match" });
-    }
-  }
-  let accessToken = AuthHelpers.createAccessToken({ email });
-  let refreshToken = AuthHelpers.createRefreshToken({ email });
+  res.json({hello: 'world'})
+  // const { email, password } = req.body;
+  // console.log('this is the body', req.body);
+  // if (!email || !password) {
+  //   res.status(422).json({ msg: 'Missing Information' });
+  // }
+  // const userAccount = await UsersService.getByEmail(app.get('db'), email).then(
+  //   (data) => {
+  //     console.log('this is the data', data);
+  //     data;
+  //   }
+  // );
+  // console.log('this is the user account', userAccount);
+  // if (!userAccount) {
+  //   res.status(403).json({ msg: 'User does not exist' });
+  // } else {
+  //   if (userAccount.password === password) {
+  //   } else {
+  //     res.status(403).json({ msg: "Password doesn't match" });
+  //   }
+  // }
+  // let accessToken = AuthHelpers.createAccessToken({ email });
+  // let refreshToken = AuthHelpers.createRefreshToken({ email });
 
-  req.session.user = { ...userAccount };
-  console.log('this is the userAccount data', userAccount);
-  req.session.user.refreshToken = refreshToken;
-  res.cookie('authorization', accessToken, {
-    secure: true,
-    httpOnly: true,
-  });
-  res
-    .json({ ...userAccount, accessToken })
-    .catch((error) =>
-      console.log('this is the server side login error catch', error.message)
-    );
+  // req.session.user = { ...userAccount };
+  // console.log('this is the userAccount data', userAccount);
+  // req.session.user.refreshToken = refreshToken;
+  // res.cookie('authorization', accessToken, {
+  //   secure: true,
+  //   httpOnly: true,
+  // });
+  // res
+  //   .json({ ...userAccount, accessToken })
+  //   .catch((error) =>
+  //     console.log('this is the server side login error catch', error.message)
+  //   );
 });
 
 app.post('/signup', async (req, res) => {
@@ -132,7 +133,7 @@ app.post('/logout', function (req, res) {
 app.use('/api/public', publicViewRouter);
 //app.use('/api/public_mentors', publicAllMentorsViewRouter);
 //this is the authentication layer
-app.use(AuthHelpers.verifyAuthTokens);
+//app.use(AuthHelpers.verifyAuthTokens);
 // below are private routes
 // routes for all CRUD commands to the server
 app.use('/api/users', usersRouter);
