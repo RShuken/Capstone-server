@@ -45,7 +45,7 @@ app.use(
 
 // default route
 app.get('/', (req, res) => {
-  res.send('Hello, world!');
+  res.send('Hello, world! Please be kinder in 2021.');
 });
 
 app.post('/login', async (req, res) => {
