@@ -29,7 +29,7 @@ const UserProfileService = {
   },
 
   updateUserProfile(knex, id, newUserFields) {
-    return knex('user_profile').where({ id }).update(newUserFields);
+    return knex('user_profile').where( 'user_id', id ).update(newUserFields);
   },
 };
 
