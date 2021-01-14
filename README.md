@@ -1,6 +1,9 @@
 # Connectful Server
 
-live app: https:
+
+live app: https://connectful-client.vercel.app/
+
+server: https://afternoon-waters-35759.herokuapp.com/
 
 # Built With
 
