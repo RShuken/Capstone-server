@@ -55,18 +55,18 @@ app.get('/', (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log('this is the body', req.body);
+  // console.log('this is the body', req.body);
   if (!email || !password) {
     res.status(422).json({ msg: 'Missing Information' });
   }
 
   const userAccount = await UsersService.getByEmail(app.get('db'), email).then(
     (data) => {
-      console.log('this is the data', data);
+      // console.log('this is the data', data);
       return data;
     }
   );
-  console.log('this is the user account', userAccount);
+  // console.log('this is the user account', userAccount);
   if (!userAccount) {
     res.status(403).json({ msg: 'User does not exist' });
   } else {
@@ -79,17 +79,16 @@ app.post('/login', async (req, res) => {
   let refreshToken = AuthHelpers.createRefreshToken({ email });
 
   req.session.user = { ...userAccount };
-  console.log('this is the userAccount data', userAccount);
+  // console.log('this is the userAccount data', userAccount);
   req.session.user.refreshToken = refreshToken;
   res.cookie('authorization', accessToken, {
     secure: true,
     httpOnly: true,
   });
-  res
-    .json({ ...userAccount, accessToken })
-    .catch((error) =>
-      console.log('this is the server side login error catch', error.message)
-    );
+  res.json({ ...userAccount, accessToken });
+  // .catch((error) =>
+  //   console.log('this is the server side login error catch', error.message)
+  // );
 });
 
 app.post('/signup', async (req, res) => {
