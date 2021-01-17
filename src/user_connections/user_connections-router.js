@@ -12,6 +12,7 @@ const serializeConnection = (connection) => ({
   user_id: connection.user_id,
   connection_id: connection.connection_id,
   name: xss(connection.name),
+  email: connection.email,
   open_sessions: connection.open_sessions,
 });
 

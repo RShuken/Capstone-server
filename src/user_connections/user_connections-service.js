@@ -33,6 +33,7 @@ const ConnectionsService = {
         'a.user_id',
         'a.connection_id',
         'b.name',
+        'b.email',
         'b.open_sessions'
       );
   },
